@@ -40,6 +40,8 @@ function renderHtml() {
     headerButtonNewGame.classList.add('header__button', 'header__button-new-game');
     headerButtonNewGame.textContent = 'New Game';
 
+    headerButtonNewGame.addEventListener('click', startNewGame);
+
     const headerButtonLeaders = document.createElement('button');
     headerButtonLeaders.classList.add('header__button', 'header__button-leaders');
     headerButtonLeaders.textContent = 'Leaders';
@@ -105,6 +107,48 @@ function cardEnabled() {
   })
 }
 
+function resetCounters() {
+  tries = 0;
+  score = 0;
+
+  updateTriesDisplay(tries);
+  updateCountersDisplay(score);
+}
+
+function shuffleCardsOnBoard() {
+  const shuffledCards = [...cardsArray];
+
+  shuffle(shuffledCards);
+
+  shuffledCards.forEach((card) => {
+    cards.append(card);
+  });
+}
+
+function closeAllCards() {
+  cardsArray.forEach((card) => {
+    card.classList.remove('is-open');
+    card.classList.remove('opened');
+    card.disabled = false;
+  });
+}
+
+function startNewGame() {
+  if (closeTimer) {
+    clearTimeout(closeTimer);
+    closeTimer = null;
+  }
+
+  firstEl = null;
+  firstCardId = null;
+
+  closeAllCards()
+
+  shuffleCardsOnBoard()
+
+  resetCounters();
+}
+
 let firstEl = null;
 let firstCardId = null;
 
@@ -114,7 +158,6 @@ let tries = 0;
 let score = 0;
 
 const cardsArray = []; 
-
 
 function renderCards(data, cardsContainer) {
   data.forEach((el) => {
@@ -177,7 +220,5 @@ function renderCards(data, cardsContainer) {
     cardsContainer.append(card);
   });
 }
-
-
 
 renderHtml();
