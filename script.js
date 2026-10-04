@@ -28,6 +28,7 @@ async function getCards(cardsContainer) {
 
 let countersTries, countersScore;
 let cards;
+let main;
 
 function renderHtml() {
     const header = document.createElement('header');
@@ -46,12 +47,13 @@ function renderHtml() {
     headerButtonLeaders.classList.add('header__button', 'header__button-leaders');
     headerButtonLeaders.textContent = 'Leaders';
 
+    headerButtonLeaders.addEventListener('click', showLeaders);
+
     containerHeader.append(headerButtonNewGame, headerButtonLeaders);
     header.append(containerHeader);
     body.append(header);
 
-
-    const main = document.createElement('main');
+    main = document.createElement('main');
     main.classList.add('main');
 
     const containerMain = document.createElement('div');
@@ -149,6 +151,66 @@ function startNewGame() {
   resetCounters();
 }
 
+function showLeaders() {
+
+}
+
+let winModal;
+let winTries;
+
+function createWinModal() {
+  winModal = document.createElement('div');
+  winModal.classList.add('win-modal');
+  winModal.style.display = 'block';
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeWinModal();
+    }
+  })
+
+  const winModalLayout = document.createElement('div');
+  winModalLayout.classList.add('win-modal__layout');
+
+  winModalLayout.addEventListener('click', () => {
+    closeWinModal();
+  })
+
+  const winModalContainer = document.createElement('div');
+  winModalContainer.classList.add('win-modal__container');
+
+  const winCloseBtn = document.createElement('button');
+  winCloseBtn.classList.add('win-modal__close-button');
+
+  winCloseBtn.addEventListener('click', () => {
+    closeWinModal();
+  });
+
+  const winMessage = document.createElement('p');
+  winMessage.classList.add('win-modal__message');
+  winMessage.textContent = 'You win!!!';
+
+  winTries = document.createElement('p');
+  winTries.classList.add('win-modal__tries');
+  winTries.textContent = `Tries: ${tries}`;
+
+  const winNewGame= document.createElement('button');
+  winNewGame.classList.add('win-modal__new-game');
+  winNewGame.textContent = 'New game';
+  winNewGame.addEventListener('click', () => {
+    closeWinModal()
+    startNewGame();
+  });
+
+  winModalContainer.append(winCloseBtn, winMessage, winTries, winNewGame);
+  winModal.append(winModalLayout, winModalContainer);
+  main.append(winModal);
+}
+
+function closeWinModal() {
+  winModal.style.display = 'none';
+}
+
 let firstEl = null;
 let firstCardId = null;
 
@@ -184,10 +246,16 @@ function renderCards(data, cardsContainer) {
           updateTriesDisplay(tries);
           score++;
           updateCountersDisplay(score);
+          if (score === 1) {
+            if (winModal) {
+              winTries.textContent = `Tries: ${tries}`;
+              winModal.style.display = 'block';
+            } else {
+              createWinModal();
+            }
+          }
 
           cardEnabled();
-
-          closeTimer = null;
         } else {
           closeTimer = setTimeout(() => {
             card.classList.remove('is-open');
@@ -198,7 +266,9 @@ function renderCards(data, cardsContainer) {
             tries++;
             updateTriesDisplay(tries);
 
-            cardEnabled()
+            cardEnabled();
+
+            closeTimer = null;
           }, 1500); 
         }
       } else {

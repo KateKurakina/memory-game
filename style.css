@@ -147,3 +147,71 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+/* win-modal */
+
+.win-modal__layout {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--text-primary);
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  opacity: 0.6;
+}
+.win-modal__container {
+  width: 500px;
+  background-color: var(--border-primary);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  gap: 50px;
+}
+
+.win-modal__close-button {
+  align-self: flex-end;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px var(--text-primary) solid;
+  background-color: var(--bg-page);
+}
+
+.win-modal__close-button::before,
+.win-modal__close-button::after {
+  position: absolute;
+  content: '';
+  width: 25px;
+  height: 2px;
+  
+  top: 23px;
+  left: 11px;
+  background-color: var(--text-primary);
+}
+
+.win-modal__close-button::before {
+  transform: rotateZ(45deg);
+}
+.win-modal__close-button::after {
+  transform: rotateZ(-45deg);
+}
+
+.win-modal__message {
+  font-size: 32px;
+}
+
+.win-modal__new-game {
+  padding: 15px 20px;
+  max-width: fit-content;
+  border-radius: var(--border-radius);
+  border: 2px var(--text-primary) solid;
+  background-color: var(--bg-page);
+}
