@@ -146,9 +146,9 @@ function startNewGame() {
   firstEl = null;
   firstCardId = null;
 
-  closeAllCards()
+  closeAllCards();
 
-  shuffleCardsOnBoard()
+  shuffleCardsOnBoard();
 
   resetCounters();
 }
@@ -174,15 +174,15 @@ function createModal() {
   const modalContainer = document.createElement('div');
   modalContainer.classList.add('modal__container');
 
-  const CloseBtn = document.createElement('button');
-  CloseBtn.classList.add('modal__close-button');
+  const closeBtn = document.createElement('button');
+  closeBtn.classList.add('modal__close-button');
 
-  CloseBtn.addEventListener('click', closeModal);
+  closeBtn.addEventListener('click', closeModal);
 
   modalContent = document.createElement('div');
   modalContent.classList.add('modal__content');
   
-  modalContainer.append(CloseBtn, modalContent);
+  modalContainer.append(closeBtn, modalContent);
   modal.append(modalLayout, modalContainer);
   main.append(modal);
 }
@@ -235,6 +235,59 @@ function showLeaders() {
 
   content.append(title);
 
+  const savedResults = JSON.parse(localStorage.getItem('memoryGameResults')) || [];
+
+  if (savedResults.length === 0) {
+    const emptyMessage = document.createElement('p');
+    emptyMessage.classList.add('leaders-modal__empty');
+    emptyMessage.textContent = 'No results';
+
+    content.append(emptyMessage);
+
+    openModal(content);
+    return;
+  }
+
+  const table = document.createElement('table');
+  table.classList.add('leaders-modal__table');
+
+  const thead = document.createElement('thead');
+
+  const headerRow = document.createElement('tr');
+
+  const placeHeader = document.createElement('th');
+  placeHeader.textContent = 'Position';
+
+  const triesHeader = document.createElement('th');
+  triesHeader.textContent = 'Tries';
+
+  const dateHeader = document.createElement('th');
+  dateHeader.textContent = 'Date';
+
+  headerRow.append(placeHeader, triesHeader, dateHeader);
+  thead.append(headerRow);
+
+  const tbody = document.createElement('tbody');
+
+  savedResults.forEach((result, index) => {
+    const row = document.createElement('tr');
+
+    const place = document.createElement('td');
+    place.textContent = index + 1;
+
+    const resultTries = document.createElement('td');
+    resultTries.textContent = result.tries;
+
+    const date = document.createElement('td');
+    date.textContent = new Date(result.date).toLocaleDateString('ru-RU');
+
+    row.append(place, resultTries, date);
+    tbody.append(row);
+  });
+
+  table.append(thead, tbody);
+  content.append(table);
+
   openModal(content);
 }
 
@@ -269,8 +322,6 @@ let closeTimer = null;
 let tries = 0;
 let score = 0;
 
-let date;
-
 const cardsArray = []; 
 
 function renderCards(data, cardsContainer) {
@@ -291,7 +342,7 @@ function renderCards(data, cardsContainer) {
           firstEl.classList.add('opened');
           card.classList.add('opened');
 
-          firstCardId = 0;
+          firstCardId = null;
           firstEl = null;
 
           tries++;
@@ -308,7 +359,7 @@ function renderCards(data, cardsContainer) {
             card.classList.remove('is-open');
             firstEl.classList.remove('is-open');
 
-            firstCardId = 0;
+            firstCardId = null;
             firstEl = null;
             tries++;
             updateTriesDisplay(tries);
