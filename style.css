@@ -146,11 +146,15 @@ body {
 .counters {
   display: flex;
   justify-content: space-between;
+  padding-bottom: 20px;
 }
 
 /* win-modal */
+.modal {
+  display: none;
+}
 
-.win-modal__layout {
+.modal__layout {
   width: 100vw;
   height: 100vh;
   background-color: var(--text-primary);
@@ -160,7 +164,7 @@ body {
   left: 0;
   opacity: 0.6;
 }
-.win-modal__container {
+.modal__container {
   width: 500px;
   background-color: var(--border-primary);
   position: fixed;
@@ -175,7 +179,7 @@ body {
   gap: 50px;
 }
 
-.win-modal__close-button {
+.modal__close-button {
   align-self: flex-end;
   position: relative;
   width: 50px;
@@ -185,8 +189,8 @@ body {
   background-color: var(--bg-page);
 }
 
-.win-modal__close-button::before,
-.win-modal__close-button::after {
+.modal__close-button::before,
+.modal__close-button::after {
   position: absolute;
   content: '';
   width: 25px;
@@ -197,10 +201,10 @@ body {
   background-color: var(--text-primary);
 }
 
-.win-modal__close-button::before {
+.modal__close-button::before {
   transform: rotateZ(45deg);
 }
-.win-modal__close-button::after {
+.modal__close-button::after {
   transform: rotateZ(-45deg);
 }
 
@@ -214,4 +218,16 @@ body {
   border-radius: var(--border-radius);
   border: 2px var(--text-primary) solid;
   background-color: var(--bg-page);
+}
+
+.leaders-modal__table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.leaders-modal__table th,
+.leaders-modal__table td {
+    padding: 10px;
+    border: 1px solid var(--text-primary);
+    text-align: center;
 }

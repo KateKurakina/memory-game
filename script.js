@@ -78,6 +78,8 @@ function renderHtml() {
     main.append(containerMain);
     body.append(main);
 
+    createModal();
+
     getCards(cards);
 }
 
@@ -151,64 +153,112 @@ function startNewGame() {
   resetCounters();
 }
 
-function showLeaders() {
+let modal;
+let modalContent;
 
-}
-
-let winModal;
-let winTries;
-
-function createWinModal() {
-  winModal = document.createElement('div');
-  winModal.classList.add('win-modal');
-  winModal.style.display = 'block';
+function createModal() {
+  modal = document.createElement('div');
+  modal.classList.add('modal');
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeWinModal();
+    if (e.key === 'Escape' && modal.style.display === 'block') {
+      closeModal();
     }
   })
 
-  const winModalLayout = document.createElement('div');
-  winModalLayout.classList.add('win-modal__layout');
+  const modalLayout = document.createElement('div');
+  modalLayout.classList.add('modal__layout');
 
-  winModalLayout.addEventListener('click', () => {
-    closeWinModal();
-  })
+  modalLayout.addEventListener('click', closeModal);
 
-  const winModalContainer = document.createElement('div');
-  winModalContainer.classList.add('win-modal__container');
+  const modalContainer = document.createElement('div');
+  modalContainer.classList.add('modal__container');
 
-  const winCloseBtn = document.createElement('button');
-  winCloseBtn.classList.add('win-modal__close-button');
+  const CloseBtn = document.createElement('button');
+  CloseBtn.classList.add('modal__close-button');
 
-  winCloseBtn.addEventListener('click', () => {
-    closeWinModal();
-  });
+  CloseBtn.addEventListener('click', closeModal);
+
+  modalContent = document.createElement('div');
+  modalContent.classList.add('modal__content');
+  
+  modalContainer.append(CloseBtn, modalContent);
+  modal.append(modalLayout, modalContainer);
+  main.append(modal);
+}
+
+function openModal(content) {
+    modalContent.replaceChildren(content);
+    modal.style.display = 'block';
+
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function showWinModal() {
+  const content = document.createElement('div');
+  content.classList.add('win-modal__content');
 
   const winMessage = document.createElement('p');
   winMessage.classList.add('win-modal__message');
   winMessage.textContent = 'You win!!!';
 
-  winTries = document.createElement('p');
+  const winTries = document.createElement('p');
   winTries.classList.add('win-modal__tries');
   winTries.textContent = `Tries: ${tries}`;
 
   const winNewGame= document.createElement('button');
   winNewGame.classList.add('win-modal__new-game');
   winNewGame.textContent = 'New game';
+
   winNewGame.addEventListener('click', () => {
-    closeWinModal()
+    closeModal()
     startNewGame();
   });
 
-  winModalContainer.append(winCloseBtn, winMessage, winTries, winNewGame);
-  winModal.append(winModalLayout, winModalContainer);
-  main.append(winModal);
+  content.append(winMessage, winTries, winNewGame);
+
+  openModal(content);
 }
 
-function closeWinModal() {
-  winModal.style.display = 'none';
+function showLeaders() {
+  const content = document.createElement('div');
+  content.classList.add('leaders-modal__content');
+
+  const title = document.createElement('h2');
+  title.classList.add('leaders-modal__title');
+  title.textContent = 'Leaders';
+
+  content.append(title);
+
+  openModal(content);
+}
+
+function saveResult() {
+  const savedResults = JSON.parse(localStorage.getItem('memoryGameResults')) || [];
+
+  const result = {
+    tries: tries,
+    date: new Date().toISOString()
+  };
+
+  savedResults.push(result);
+
+  savedResults.sort((a, b) => {
+    if (a.tries !== b.tries) {
+      return a.tries - b.tries;
+    }
+
+    return new Date(a.date) - new Date(b.date);
+  });
+
+  const topResults = savedResults.slice(0, 10);
+
+  localStorage.setItem('memoryGameResults', JSON.stringify(topResults));
 }
 
 let firstEl = null;
@@ -218,6 +268,8 @@ let closeTimer = null;
 
 let tries = 0;
 let score = 0;
+
+let date;
 
 const cardsArray = []; 
 
@@ -246,15 +298,10 @@ function renderCards(data, cardsContainer) {
           updateTriesDisplay(tries);
           score++;
           updateCountersDisplay(score);
-          if (score === 1) {
-            if (winModal) {
-              winTries.textContent = `Tries: ${tries}`;
-              winModal.style.display = 'block';
-            } else {
-              createWinModal();
-            }
+          if (score === 8) {
+            saveResult();
+            showWinModal();
           }
-
           cardEnabled();
         } else {
           closeTimer = setTimeout(() => {
