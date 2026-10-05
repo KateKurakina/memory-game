@@ -375,16 +375,16 @@ function renderCards(data, cardsContainer) {
       }
     });
 
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(el.svg, "image/svg+xml");
-    const svgElement = xmlDoc.documentElement;
-    svgElement.classList.add('card__image');
+    const cardImage = document.createElement('img')
+    cardImage.classList.add('card__image');
+    cardImage.src = el.path;
+    cardImage.alt = 'monster image'
 
     const cardPar = document.createElement('p');
     cardPar.classList.add('card__par');
     cardPar.textContent = "?";
 
-    card.append(svgElement, cardPar);
+    card.append(cardImage, cardPar);
     cardsContainer.append(card);
   });
 }
