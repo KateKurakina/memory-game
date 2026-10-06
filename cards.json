@@ -1,0 +1,34 @@
+[
+    {
+        "pairId": "monster-1",
+        "path": "./images/monster-1.png"
+    },
+    {
+        "pairId": "monster-2",
+        "path": "./images/monster-2.png"
+    },
+    {
+        "pairId": "monster-3",
+        "path": "./images/monster-3.png"
+    },
+    {
+        "pairId": "monster-4",
+        "path": "./images/monster-4.png"
+    },
+    {
+        "pairId": "monster-5",
+        "path": "./images/monster-5.png"
+    },
+    {
+        "pairId": "monster-6",
+        "path": "./images/monster-6.png"
+    },
+    {
+        "pairId": "monster-7",
+        "path": "./images/monster-7.png"
+    },
+    {
+        "pairId": "monster-8",
+        "path": "./images/monster-8.png"
+    }
+]

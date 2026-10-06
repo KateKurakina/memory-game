@@ -1,0 +1,245 @@
+@font-face {
+  font-family: 'Press-Start-2P';
+  src: url('./fonts/PressStart2P-Regular.woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-page: #73061d;
+  --bg-card: #c9b0a1;
+  --bg-card-open: #9d7b64;
+
+  --text-primary: #000000;
+  --text-accent: #e7c78b;
+
+  --border-primary: #c6742c;
+
+  --border-radius: 40px;
+
+  --container-width: 1200px;
+  --container-padding-x: 40px;
+
+  --transition-duration: 0.2s;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+button {
+  cursor: pointer;
+}
+
+p,
+button,
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-family: 'Press-Start-2P', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background-color: var(--bg-page);
+  font-family: 'Press-Start-2P', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.container {
+  max-width: calc(var(--container-width) + var(--container-padding-x) * 2);
+  margin-inline: auto;
+  padding-inline: var(--container-padding-x);
+}
+
+/* header */
+.header__container {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 20px;
+}
+
+.header__button {
+  line-height: 1.5;
+  color: var(--text-primary);
+  padding: 14px;
+  border-radius: var(--border-radius);
+  border: 2px var(--text-primary) solid;
+  background-color: var(--border-primary);
+  color: var(--text-primary);
+  transition: background-color var(--transition-duration) linear;
+}
+
+.header__button:hover {
+  background-color: var(--text-accent);
+}
+
+/* main */
+.main__container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  column-gap: 40px;
+  row-gap: 20px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 270px;
+  width: 100%;
+  height: 270px;
+  border-radius: var(--border-radius);
+  border: 2px var(--text-primary) solid;
+  background-color: var(--bg-card);
+}
+
+.card.is-open {
+  background-color: var(--bg-card-open);
+}
+
+.card__image {
+  display: none;
+  padding-top: 35px;
+}
+
+.card.is-open .card__image{
+  display: block;
+  padding-top: 35px;
+}
+
+.card__par {
+  display: block;
+  font-size: 64px;
+}
+
+.card.is-open .card__par{
+  display: none;
+  font-size: 64px;
+}
+
+.counters {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+
+/* modal */
+.modal {
+  display: none;
+}
+
+.modal__layout {
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--text-primary);
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  opacity: 0.6;
+}
+
+.modal__container {
+  width: 700px;
+  background-color: var(--border-primary);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 25px;
+  gap: 50px;
+}
+
+.modal__close-button {
+  align-self: flex-end;
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px var(--text-primary) solid;
+  background-color: var(--bg-page);
+}
+
+.modal__close-button::before,
+.modal__close-button::after {
+  position: absolute;
+  content: '';
+  width: 25px;
+  height: 2px;
+  
+  top: 23px;
+  left: 11px;
+  background-color: var(--text-primary);
+}
+
+.modal__close-button::before {
+  transform: rotateZ(45deg);
+}
+.modal__close-button::after {
+  transform: rotateZ(-45deg);
+}
+
+.leaders-modal__content,
+.win-modal__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+}
+
+.win-modal__message {
+  font-size: 32px;
+}
+
+.win-modal__new-game {
+  padding: 15px 20px;
+  max-width: fit-content;
+  border-radius: var(--border-radius);
+  border: 2px var(--text-primary) solid;
+  background-color: var(--bg-page);
+}
+
+.leaders-modal__table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.leaders-modal__table th,
+.leaders-modal__table td {
+    padding: 10px;
+    border: 1px solid var(--text-primary);
+    text-align: center;
+}
